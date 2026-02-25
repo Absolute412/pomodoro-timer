@@ -71,23 +71,29 @@ function Pomodoro() {
         setMode(newMode);
         if (newMode === "pomodoro" && cycles === 0) setCycles(0);
     };
+    
+    // Reset only the active session timer (keeps current mode and cycle count).
+    const resetCurrentMode = () => {
+        setIsRunning(false);
+        setTimeLeft(DURATIONS[mode]);
+    };
 
     return(
-        <div className="w-full py-2 text-center font-sans bg-[#1e213f] text-[#d7e0ff] min-h-screen">
+        <div className="w-full py-4 px-3 sm:px-4 text-center font-sans bg-[#1e213f] text-[#d7e0ff] min-h-screen">
             <div className="hidden bg-[tomato] text-white px-2 py-1 rounded-xl text-sm mb-4">
                 Please select a timer before starting.
             </div>
 
-            <div className="inline-block p-2 w-150 max-sm:w-125 scale-90 sm:scale-100 box-border">
-                <h1 className="text-3xl my-5 font-bold">⏰Pomodoro Timer</h1>
+            <div className="mx-auto w-full max-w-2xl p-2 sm:p-4 box-border">
+                <h1 className="text-2xl sm:text-3xl my-5 font-bold">Pomodoro Timer</h1>
 
                 {/* Mode buttons */}
-                <div className="flex justify-center mt-5 mb-1">
+                <div className="flex flex-wrap justify-center gap-2 mt-5 mb-2">
                     {["pomodoro", "short", "long"].map(type => (
                         <button
                             key={type}
                             onClick={() => switchMode(type)}
-                            className={`px-5 py-2 mx-1 rounded-md cursor-pointer transition-all duration-200
+                            className={`px-4 sm:px-5 py-2 rounded-md cursor-pointer transition-all duration-200 text-sm sm:text-base
                                 ${
                                     mode === type
                                         ? "bg-[#020323]"
@@ -105,15 +111,15 @@ function Pomodoro() {
                 </div>
 
                 {/* Timer */}
-                <main className="w-90 h-90 rounded-full mx-auto mb-8 flex items-center justify-center">
+                <main className="w-[min(85vw,22rem)] h-[min(85vw,22rem)] sm:w-88 sm:h-88 rounded-full mx-auto mb-8 flex items-center justify-center">
                     <div className="
                         flex flex-col justify-center items-center w-full h-full relative
                         my-10 mx-0 text-center rounded-full bg-[#151932]
                         shadow-[20px_20px_42px_#0e1021,-20px_-20px_42px_#1c2244]
-                        before:content-[''] before:absolute before:border-10
-                        before:border-[royalblue] before:rounded-full before:w-84 before:h-84
+                        before:content-[''] before:absolute before:border-8 sm:before:border-10
+                        before:border-[royalblue] before:rounded-full before:w-[92%] before:h-[92%]
                     ">
-                        <h1 className="text-[5rem] font-bold">
+                        <h1 className="text-[2.6rem] sm:text-[5rem] font-bold leading-none">
                             {Math.floor(timeLeft / 60)}:
                             {(timeLeft % 60).toString().padStart(2, "0")}
                         </h1>
@@ -121,20 +127,26 @@ function Pomodoro() {
                 </main>
 
                 {/* controls */}
-                <div className="mt-5">
+                <div className="mt-5 flex flex-wrap justify-center gap-3">
                     <button 
                         onClick={() => !isRunning && setIsRunning(true)}
-                        className="bg-[#2e325a] hover:bg-[#219a52] px-5 py-2 mx-2 rounded transition-all cursor-pointer"
+                        className="bg-[#2e325a] hover:bg-[#219a52] px-5 py-2 rounded transition-all cursor-pointer text-sm sm:text-base"
                     >START</button>
                     
                     <button 
                         onClick={() => setIsRunning(false)}
-                        className="bg-[#2e325a] hover:bg-[tomato] px-5 py-2 mx-2 rounded transition-all cursor-pointer"
+                        className="bg-[#2e325a] hover:bg-[tomato] px-5 py-2 rounded transition-all cursor-pointer text-sm sm:text-base"
                     >STOP</button>
+
+                    {/* Resets the current session back to its full duration. */}
+                    <button
+                        onClick={resetCurrentMode}
+                        className="bg-[#2e325a] hover:bg-[#3a6ea5] px-5 py-2 rounded transition-all cursor-pointer text-sm sm:text-base"
+                    >RESET</button>
                 </div>
 
                 <div className="mt-4">
-                    <h1 className="font-semibold text-xl">
+                    <h1 className="font-semibold text-lg sm:text-xl">
                         Pomodoro count: <span className="font-bold">{cycles}</span>
                     </h1>
                 </div>
